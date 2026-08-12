@@ -11,6 +11,12 @@ export default function TaskItem({
 }) {
   return (
     <li className="flex items-center gap-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-3">
+      {/* 
+        This form lives in a client component because it needs to handle
+        user interactions (click events) and manage form submission on the client.
+        Server actions are invoked from here, but the interactive behavior
+        must be in a client component.
+      */}
       <form
         action={async () => {
           await onToggle(task.id, !task.completed);
