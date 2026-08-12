@@ -18,15 +18,19 @@ Browser → Web (Next.js :3000) → API (Express :3001) → PostgreSQL
 
 The app is a simple task manager (to-do list) that demonstrates how the three tiers communicate.
 
-## Running locally with Docker Compose
+## Local Development
 
 ### Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine + Compose plugin)
 
-### Start the stack
+### Getting started
+
+Clone the repository and start the development stack:
 
 ```bash
+git clone https://github.com/ARamirez-8/example-three-tier-application.git
+cd example-three-tier-application
 docker compose up --build
 ```
 
@@ -37,9 +41,9 @@ This starts four services in order:
 3. **api** — Express API on port 3001 (internal only)
 4. **web** — Next.js frontend on port 3000 (exposed to host)
 
-Once running, open [http://localhost:3000](http://localhost:3000).
+Once running, open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Stop and clean up
+### Stopping and cleaning up
 
 ```bash
 # Stop containers (keeps the postgres_data volume)
@@ -49,7 +53,7 @@ docker compose down
 docker compose down -v
 ```
 
-### Rebuild after code changes
+### Rebuilding after code changes
 
 ```bash
 docker compose up --build
