@@ -10,6 +10,10 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/ready', (_req, res) => {
+  res.json({ ready: true });
+});
+
 // GET /tasks — list all tasks
 app.get('/tasks', async (_req, res) => {
   const { rows } = await db.query('SELECT * FROM tasks ORDER BY created_at ASC');
