@@ -16,6 +16,14 @@ app.get('/tasks', async (_req, res) => {
   res.json(rows);
 });
 
+// GET /tasks/:id/status — get the status of a specific task
+app.get('/tasks/:id/status', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { rows } = await db.query('SELECT id, completed FROM tasks WHERE id = $1', [id]);
+  if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
+  res.json({ id: rows[0].id, status: rows[0].completed ? 'completed' : 'pending' });
+});
+
 // POST /tasks — create a task
 app.post('/tasks', async (req, res) => {
   const { title } = req.body;
