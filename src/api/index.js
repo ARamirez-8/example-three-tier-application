@@ -48,6 +48,20 @@ app.patch('/tasks/:id', async (req, res) => {
   res.json(updated[0]);
 });
 
+// PATCH /tasks/:id/complete — mark a task as done
+app.patch('/tasks/:id/complete', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+
+  const { rows } = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
+  if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
+
+  const { rows: updated } = await db.query(
+    'UPDATE tasks SET completed = true WHERE id = $1 RETURNING *',
+    [id]
+  );
+  res.json(updated[0]);
+});
+
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
 });
