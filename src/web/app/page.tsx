@@ -2,6 +2,8 @@ import { getTasks, createTask, toggleTask } from './actions';
 
 export default async function Home() {
   const tasks = await getTasks();
+  // TODO: Add filtering by status (active, completed, all)
+  // TODO: Add due dates to tasks
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 py-16 px-4">

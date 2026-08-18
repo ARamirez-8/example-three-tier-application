@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require('./db');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -46,6 +48,59 @@ app.patch('/tasks/:id', async (req, res) => {
     [newCompleted, newTitle, id]
   );
   res.json(updated[0]);
+});
+
+// GET /todos — find all TODO comments in the codebase
+// TODO: Add pagination for large codebases
+app.get('/todos', (_req, res) => {
+  const todos = [];
+  const codebaseRoot = path.join(__dirname, '..');
+  const ignoreDirs = ['.git', 'node_modules', '.next', 'dist', 'build', '.terraform'];
+
+  function searchDirectory(dir) {
+    try {
+      const files = fs.readdirSync(dir);
+      for (const file of files) {
+        if (ignoreDirs.includes(file)) continue;
+        const filePath = path.join(dir, file);
+        const stat = fs.statSync(filePath);
+
+        if (stat.isDirectory()) {
+          searchDirectory(filePath);
+        } else if (
+          file.endsWith('.ts') ||
+          file.endsWith('.tsx') ||
+          file.endsWith('.js') ||
+          file.endsWith('.jsx') ||
+          file.endsWith('.py') ||
+          file.endsWith('.go') ||
+          file.endsWith('.java')
+        ) {
+          try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            const lines = content.split('\n');
+            lines.forEach((line, index) => {
+              const todoMatch = line.match(/TODO[:\s]+(.*?)(?:$|\/\/|#)/);
+              if (todoMatch) {
+                todos.push({
+                  file: path.relative(codebaseRoot, filePath),
+                  line: index + 1,
+                  text: todoMatch[1].trim(),
+                });
+              }
+            });
+          } catch (e) {
+            // Skip files that can't be read
+          }
+        }
+      }
+    } catch (e) {
+      // Skip directories that can't be read
+    }
+  }
+
+  searchDirectory(codebaseRoot);
+  res.json(todos);
 });
 
 app.listen(PORT, () => {
