@@ -22,6 +22,7 @@ app.post('/tasks', async (req, res) => {
   if (!title || typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'title is required' });
   }
+  // TODO: Add input validation for title length
   const { rows } = await db.query(
     'INSERT INTO tasks (title) VALUES ($1) RETURNING *',
     [title.trim()]
@@ -41,6 +42,7 @@ app.patch('/tasks/:id', async (req, res) => {
   const newCompleted = completed !== undefined ? Boolean(completed) : current.completed;
   const newTitle = title !== undefined ? title.trim() : current.title;
 
+  // TODO: Add error handling for database update failures
   const { rows: updated } = await db.query(
     'UPDATE tasks SET completed = $1, title = $2 WHERE id = $3 RETURNING *',
     [newCompleted, newTitle, id]

@@ -1,0 +1,16 @@
+{
+  "name": "example-three-tier-application",
+  "version": "0.1.0",
+  "description": "A reference implementation of a three-tier web application",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "pi": "node src/cli/pi.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "readline": "builtin"
+  }
+}
