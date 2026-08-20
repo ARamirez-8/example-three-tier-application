@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
+// health probe used by the load balancer
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
