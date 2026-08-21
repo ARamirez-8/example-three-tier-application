@@ -66,6 +66,24 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+### Health check
+
+`GET /health` returns a JSON object confirming the API process is running:
+
+```json
+{
+  "status": "ok",
+  "uptime": 42.3
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | string | Always `"ok"` when the process is alive |
+| `uptime` | number | Seconds since the API process started (`process.uptime()`) |
+
+This endpoint does **not** check database connectivity — it is a lightweight liveness probe suitable for use as a Docker or Cloud Run health check.
+
 ## Project structure
 
 ```
