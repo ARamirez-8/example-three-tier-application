@@ -62,6 +62,7 @@ The API is not exposed directly, but you can reach it through the web container 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/health` | Health check |
+| GET | `/version` | API version |
 | GET | `/tasks` | List all tasks |
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
@@ -83,6 +84,20 @@ The API is not exposed directly, but you can reach it through the web container 
 | `uptime` | number | Seconds since the API process started (`process.uptime()`) |
 
 This endpoint does **not** check database connectivity — it is a lightweight liveness probe suitable for use as a Docker or Cloud Run health check.
+
+### Version
+
+`GET /version` returns the API's current version as declared in `src/api/package.json`:
+
+```json
+{
+  "version": "1.0.0"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Semantic version of the API (from `package.json`) |
 
 ## Project structure
 
