@@ -61,8 +61,9 @@ The API is not exposed directly, but you can reach it through the web container 
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/health` | Health check |
+| GET | `/health` | Liveness probe — process is running |
 | GET | `/version` | API version |
+| GET | `/ready` | Readiness probe — API is ready to serve traffic |
 | GET | `/tasks` | List all tasks |
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
@@ -98,6 +99,22 @@ This endpoint does **not** check database connectivity — it is a lightweight l
 | Field | Type | Description |
 |-------|------|-------------|
 | `version` | string | Semantic version of the API (from `package.json`) |
+
+### Readiness
+
+`GET /ready` returns a JSON object indicating the API is ready to serve traffic:
+
+```json
+{
+  "ready": true
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `ready` | boolean | Always `true` when the process can accept requests |
+
+This endpoint is intended as a readiness probe (e.g. for Kubernetes or Cloud Run startup checks). It confirms the HTTP server is accepting connections but does **not** verify database connectivity.
 
 ## Project structure
 

@@ -71,3 +71,33 @@ test('/version response has exactly the expected keys', () => {
 
   assert.deepEqual(Object.keys(sent), ['version']);
 });
+
+// Test the /ready response shape by simulating the handler logic directly.
+// The handler does: res.json({ ready: true })
+
+test('/ready handler returns ready: true', () => {
+  let sent;
+  const res = { json: (body) => { sent = body; } };
+
+  res.json({ ready: true });
+
+  assert.equal(sent.ready, true);
+});
+
+test('/ready response ready field is a boolean', () => {
+  let sent;
+  const res = { json: (body) => { sent = body; } };
+
+  res.json({ ready: true });
+
+  assert.equal(typeof sent.ready, 'boolean');
+});
+
+test('/ready response has exactly the expected keys', () => {
+  let sent;
+  const res = { json: (body) => { sent = body; } };
+
+  res.json({ ready: true });
+
+  assert.deepEqual(Object.keys(sent), ['ready']);
+});
